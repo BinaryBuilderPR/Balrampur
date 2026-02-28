@@ -9,11 +9,11 @@ export async function POST(req: Request) {
 
     const training = await Training.findById(body.id);
 
-    if (!training) {
-      return NextResponse.json(
-        { error: "Training not found" },
+      if (!training) {
+       return NextResponse.json(
+      { error: "Training not found" },
         { status: 404 }
-      );
+    );                      
     }
 
     training.responses.push({

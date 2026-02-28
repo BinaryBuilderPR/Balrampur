@@ -18,7 +18,8 @@ const trainerQuestions = [
   "Participants were involved"
 ];
 
-export default function ṣ() {
+export default function FeedbackForm() {
+  const [submitted, setSubmitted] = useState(false);
   const { id } = useParams();
 
   const [programme, setProgramme] = useState<number[]>(
@@ -53,73 +54,124 @@ export default function ṣ() {
       body: JSON.stringify({ id, programme, trainer })
     });
 
-    alert("Feedback Submitted Successfully!");
+    setSubmitted(true);
   };
 
+  const RatingRow = ({
+    value,
+    onChange,
+    color
+  }: {
+    value: number;
+    onChange: (val: number) => void;
+    color: string;
+  }) => {
+    const options = [
+      { label: "Strongly Disagree", rating: 1 },
+      { label: "Disagree", rating: 2 },
+      { label: "Agree", rating: 3 },
+      { label: "Strongly Agree", rating: 4 }
+    ];
+
+    return (
+      <div className="flex flex-wrap items-center gap-6 mt-4">
+        {options.map((opt) => (
+          <div key={opt.rating} className="flex items-center gap-2">
+            <button
+              onClick={() => onChange(opt.rating)}
+              className={`w-10 h-10 rounded-full border font-semibold transition-all duration-200
+                ${
+                  value === opt.rating
+                    ? `${color} text-white scale-110 shadow-md`
+                    : "bg-white hover:bg-gray-100"
+                }`}
+            >
+              {opt.rating}
+            </button>
+
+            <span className="text-sm text-gray-600 whitespace-nowrap">
+              {opt.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-10 rounded-2xl shadow-lg text-center max-w-md">
+          <h1 className="text-3xl font-bold text-green-600 mb-4">
+            🎉 Thank You!
+          </h1>
+          <p className="text-gray-700">
+            Your feedback has been submitted successfully.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-10 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">
-        Training Feedback
-      </h1>
+    <div className="min-h-screen bg-gray-100 flex justify-center py-10">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-4xl">
 
-      {/* Programme Section */}
-      <h2 className="text-xl font-semibold mb-4">
-        Programme Feedback
-      </h2>
+        <h1 className="text-3xl font-bold text-center mb-10">
+          Training Feedback
+        </h1>
 
-      {programmeQuestions.map((q, index) => (
-        <div key={index} className="mb-4">
-          <p className="mb-2">{q}</p>
-          {[1, 2, 3, 4].map((rating) => (
-            <button
-              key={rating}
-              onClick={() =>
-                handleProgrammeChange(index, rating)
-              }
-              className={`px-3 py-1 mr-2 border rounded ${
-                programme[index] === rating
-                  ? "bg-blue-600 text-white"
-                  : ""
-              }`}
-            >
-              {rating}
-            </button>
+        {/* Programme Section */}
+        <div className="mb-12">
+          <h2 className="text-xl font-semibold mb-6 text-blue-600 border-b pb-2">
+            Programme Feedback
+          </h2>
+
+          {programmeQuestions.map((q, index) => (
+            <div key={index} className="mb-8">
+              <p className="font-medium">{q}</p>
+
+              <RatingRow
+                value={programme[index]}
+                onChange={(val) =>
+                  handleProgrammeChange(index, val)
+                }
+                color="bg-blue-600"
+              />
+            </div>
           ))}
         </div>
-      ))}
 
-      {/* Trainer Section */}
-      <h2 className="text-xl font-semibold mt-6 mb-4">
-        Trainer Feedback
-      </h2>
+        {/* Trainer Section */}
+        <div className="mb-12">
+          <h2 className="text-xl font-semibold mb-6 text-green-600 border-b pb-2">
+            Trainer Feedback
+          </h2>
 
-      {trainerQuestions.map((q, index) => (
-        <div key={index} className="mb-4">
-          <p className="mb-2">{q}</p>
-          {[1, 2, 3, 4].map((rating) => (
-            <button
-              key={rating}
-              onClick={() =>
-                handleTrainerChange(index, rating)
-              }
-              className={`px-3 py-1 mr-2 border rounded ${
-                trainer[index] === rating
-                  ? "bg-green-600 text-white"
-                  : ""
-              }`}
-            >
-              {rating}
-            </button>
+          {trainerQuestions.map((q, index) => (
+            <div key={index} className="mb-8">
+              <p className="font-medium">{q}</p>
+
+              <RatingRow
+                value={trainer[index]}
+                onChange={(val) =>
+                  handleTrainerChange(index, val)
+                }
+                color="bg-green-600"
+              />
+            </div>
           ))}
         </div>
-      ))}
 
-      <button
-        onClick={submitFeedback}
-        className="bg-black text-white px-6 py-2 mt-6 rounded"
-      >
-        Submit Feedback
-      </button>
+        <div className="text-center">
+          <button
+            onClick={submitFeedback}
+            className="bg-black text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition"
+          >
+            Submit Feedback
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

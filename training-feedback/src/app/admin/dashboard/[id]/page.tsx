@@ -39,7 +39,9 @@ const percentage = (overall / 4) * 100;
 
   return (
     <div className="p-10">
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        Feedback Details
+      </h1>
 
       <div className="bg-white shadow p-6 rounded mb-6">
         <p><strong>Title:</strong> {training.title}</p>
