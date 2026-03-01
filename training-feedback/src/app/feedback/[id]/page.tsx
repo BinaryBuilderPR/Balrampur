@@ -74,9 +74,9 @@ export default function FeedbackForm() {
     ];
 
     return (
-      <div className="flex flex-wrap items-center gap-6 mt-4">
+      <div className="xl:flex  flex-wrap items-center gap-6 mt-4 ">
         {options.map((opt) => (
-          <div key={opt.rating} className="flex items-center gap-2">
+          <div key={opt.rating} className=" flex items-center gap-2 mt-4">
             <button
               onClick={() => onChange(opt.rating)}
               className={`w-10 h-10 rounded-full border font-semibold transition-all duration-200
